@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memoir Maker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="logo">Memoir Maker</h1>
+            <p class="tagline">Visualize your memories through different lenses</p>
+        </header>
+
+        <!-- Screen 1: Upload Memories -->
+        <section id="screen-upload" class="screen active">
+            <h2>Upload Your Memories</h2>
+            <p class="instructions">Upload 1-10 images with their accompanying stories</p>
+
+            <div class="upload-section">
+                <input type="file" id="image-upload" accept="image/*" multiple style="display: none;">
+                <button id="upload-btn" class="btn-primary">
+                    <span class="btn-icon">+</span> Add Image
+                </button>
+                <p class="upload-hint">You can upload up to 10 images</p>
+            </div>
+
+            <div id="memories-list" class="memories-list"></div>
+
+            <div class="action-buttons">
+                <button id="start-over-btn" class="btn-secondary">Start Over</button>
+                <button id="continue-to-genre-btn" class="btn-primary" disabled>Continue to Genre Selection</button>
+            </div>
+        </section>
+
+        <!-- Screen 2: Select Genre -->
+        <section id="screen-genre" class="screen">
+            <h2>Select a Genre Lens</h2>
+            <p class="instructions">How would you like to frame your memoir?</p>
+
+            <div class="genre-grid">
+                <div class="genre-card" data-genre="literary-fiction">
+                    <h3>Literary Fiction</h3>
+                    <p>Introspective and lyrical, exploring deep emotional truths</p>
+                </div>
+                <div class="genre-card" data-genre="thriller">
+                    <h3>Thriller</h3>
+                    <p>Tension and suspense, keeping readers on edge</p>
+                </div>
+                <div class="genre-card" data-genre="coming-of-age">
+                    <h3>Coming-of-Age</h3>
+                    <p>Growth and transformation from innocence to experience</p>
+                </div>
+                <div class="genre-card" data-genre="noir">
+                    <h3>Noir</h3>
+                    <p>Shadows and moral ambiguity in an urban landscape</p>
+                </div>
+                <div class="genre-card" data-genre="romance">
+                    <h3>Romance</h3>
+                    <p>Emotional connections and intimate relationships</p>
+                </div>
+                <div class="genre-card" data-genre="hero-journey">
+                    <h3>Hero's Journey</h3>
+                    <p>Epic transformation through trials and discovery</p>
+                </div>
+                <div class="genre-card" data-genre="magical-realism">
+                    <h3>Magical Realism</h3>
+                    <p>Blending the ordinary with the extraordinary</p>
+                </div>
+                <div class="genre-card" data-genre="horror">
+                    <h3>Horror</h3>
+                    <p>Confronting fear, dread, and the uncanny</p>
+                </div>
+                <div class="genre-card" data-genre="sci-fi-dystopia">
+                    <h3>Sci-Fi Dystopia</h3>
+                    <p>Oppressive systems and loss of freedom in a bleak future</p>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button id="back-to-upload-btn" class="btn-secondary">Back to Memories</button>
+            </div>
+        </section>
+
+        <!-- Screen 3: Select Format & Timeline -->
+        <section id="screen-format" class="screen">
+            <h2>Choose Your Format</h2>
+            <p class="instructions">How should we visualize your memoir?</p>
+
+            <div class="format-grid">
+                <div class="format-card" data-format="comic-panels">
+                    <h3>Comic Book Panels</h3>
+                    <p>Grid layout with borders and dynamic captions</p>
+                </div>
+                <div class="format-card" data-format="graphic-novel">
+                    <h3>Graphic Novel</h3>
+                    <p>Full-bleed images with varied panel sizes</p>
+                </div>
+                <div class="format-card" data-format="illustrated-vignettes">
+                    <h3>Illustrated Vignettes</h3>
+                    <p>Scattered artistic arrangement with decorative elements</p>
+                </div>
+                <div class="format-card" data-format="photo-essay">
+                    <h3>Photo Essay</h3>
+                    <p>Magazine-style editorial layout</p>
+                </div>
+                <div class="format-card" data-format="simple-text">
+                    <h3>Simple Text Layout</h3>
+                    <p>Minimalist, manuscript-style presentation</p>
+                </div>
+            </div>
+
+            <div class="timeline-section">
+                <h3>Timeline Order</h3>
+                <div class="timeline-options">
+                    <label class="timeline-option">
+                        <input type="radio" name="timeline" value="chronological" checked>
+                        <span>Chronological</span>
+                        <small>From earliest to latest</small>
+                    </label>
+                    <label class="timeline-option">
+                        <input type="radio" name="timeline" value="in-media-res">
+                        <span>In Media Res</span>
+                        <small>Start with the most intense moment</small>
+                    </label>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button id="back-to-genre-btn" class="btn-secondary">Back to Genre</button>
+            </div>
+        </section>
+
+        <!-- Screen 4: Generated Preview -->
+        <section id="screen-preview" class="screen">
+            <h2>Your Memoir Preview</h2>
+            <p class="instructions" id="preview-subtitle">Here's how your memoir could look</p>
+
+            <div class="preview-container">
+                <div id="canvas-container"></div>
+            </div>
+
+            <div class="narrative-section">
+                <h3>Narrative Inspiration</h3>
+                <div id="narrative-snippet" class="narrative-snippet"></div>
+            </div>
+
+            <div class="prompts-section">
+                <h3>Writing Prompts</h3>
+                <ul id="writing-prompts" class="writing-prompts"></ul>
+            </div>
+
+            <div class="action-buttons">
+                <button id="download-preview-btn" class="btn-primary">Download Preview</button>
+                <button id="edit-memories-btn" class="btn-secondary">Edit Memories</button>
+                <button id="try-different-genre-btn" class="btn-secondary">Try Different Genre</button>
+                <button id="try-different-format-btn" class="btn-secondary">Try Different Format</button>
+                <button id="new-project-btn" class="btn-secondary">New Project</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Load P5.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+
+    <!-- Load application scripts -->
+    <script src="js/memoryManager.js"></script>
+    <script src="js/genreEngine.js"></script>
+    <script src="js/formatRenderer.js"></script>
+    <script src="js/previewGenerator.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
