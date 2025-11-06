@@ -5,12 +5,14 @@ const PreviewGenerator = {
     currentGenre: null,
     currentFormat: null,
     currentTimeline: null,
+    loadedImages: [],
 
     // Initialize P5.js sketch
     init(genre, format, timeline) {
         this.currentGenre = genre;
         this.currentFormat = format;
         this.currentTimeline = timeline;
+        this.loadedImages = [];
 
         // Remove existing canvas if any
         if (this.p5Instance) {
@@ -22,10 +24,33 @@ const PreviewGenerator = {
         const container = document.getElementById('canvas-container');
         container.innerHTML = '';
 
+        // Get memories to preload
+        const memories = MemoryManager.getMemories();
+        const orderedMemories = GenreEngine.reorderMemories(memories, this.currentTimeline);
+
         // Create new P5.js instance
         const sketch = (p5) => {
+            // Preload all images
+            p5.preload = () => {
+                orderedMemories.forEach(memory => {
+                    if (memory.image) {
+                        try {
+                            const img = p5.loadImage(memory.image);
+                            this.loadedImages.push(img);
+                        } catch (error) {
+                            console.error('Error loading image:', error);
+                            this.loadedImages.push(null);
+                        }
+                    } else {
+                        this.loadedImages.push(null);
+                    }
+                });
+            };
+
+            // Setup and render
             p5.setup = () => {
-                this.generatePreview(p5);
+                p5.noLoop(); // Only draw once
+                this.generatePreview(p5, orderedMemories);
             };
         };
 
@@ -33,25 +58,21 @@ const PreviewGenerator = {
     },
 
     // Generate the preview
-    generatePreview(p5) {
-        const memories = MemoryManager.getMemories();
+    generatePreview(p5, orderedMemories) {
         const genre = GenreEngine.getGenre(this.currentGenre);
         const format = FormatRenderer.getFormat(this.currentFormat);
 
-        if (!genre || !format || memories.length === 0) {
+        if (!genre || !format || orderedMemories.length === 0) {
             this.renderError(p5);
             return;
         }
 
-        // Reorder memories based on timeline
-        const orderedMemories = GenreEngine.reorderMemories(memories, this.currentTimeline);
-
         // Get genre color theme
         const colorTheme = GenreEngine.getColorTheme(this.currentGenre);
 
-        // Render the format
+        // Render the format with preloaded images
         try {
-            format.render(p5, orderedMemories, colorTheme);
+            format.render(p5, orderedMemories, colorTheme, this.loadedImages);
         } catch (error) {
             console.error('Error rendering preview:', error);
             this.renderError(p5);
@@ -99,5 +120,6 @@ const PreviewGenerator = {
             this.p5Instance.remove();
             this.p5Instance = null;
         }
+        this.loadedImages = [];
     }
 };

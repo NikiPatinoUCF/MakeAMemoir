@@ -90,12 +90,28 @@ const App = {
     handleImageUpload(files) {
         if (!files || files.length === 0) return;
 
-        Array.from(files).forEach(file => {
-            if (MemoryManager.getCount() >= MemoryManager.maxMemories) {
-                alert(`Maximum of ${MemoryManager.maxMemories} memories allowed`);
-                return;
-            }
+        const filesArray = Array.from(files);
+        const currentCount = MemoryManager.getCount();
+        const availableSlots = MemoryManager.maxMemories - currentCount;
 
+        // Check if we have room for any files
+        if (availableSlots <= 0) {
+            alert(`Maximum of ${MemoryManager.maxMemories} memories already reached`);
+            document.getElementById('image-upload').value = '';
+            return;
+        }
+
+        // Determine how many files we can process
+        const filesToProcess = filesArray.slice(0, availableSlots);
+        const rejectedCount = filesArray.length - filesToProcess.length;
+
+        // Show warning if some files will be rejected
+        if (rejectedCount > 0) {
+            alert(`Only ${availableSlots} slot(s) available. ${rejectedCount} file(s) will not be uploaded.`);
+        }
+
+        // Process the files
+        filesToProcess.forEach(file => {
             const reader = new FileReader();
             reader.onload = (e) => {
                 const memory = MemoryManager.addMemory(e.target.result);

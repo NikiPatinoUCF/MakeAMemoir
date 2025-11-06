@@ -4,7 +4,7 @@ const FormatRenderer = {
     formats: {
         'comic-panels': {
             name: 'Comic Book Panels',
-            render(p5, memories, colorTheme) {
+            render(p5, memories, colorTheme, loadedImages) {
                 const cols = Math.min(3, memories.length);
                 const rows = Math.ceil(memories.length / cols);
                 const panelWidth = 280;
@@ -30,10 +30,9 @@ const FormatRenderer = {
                     p5.fill(37, 37, 64);
                     p5.rect(x, y, panelWidth, panelHeight, 8);
 
-                    // Load and draw image
-                    if (memory.image) {
-                        const img = p5.loadImage(memory.image);
-                        p5.image(img, x + 10, y + 10, panelWidth - 20, 180);
+                    // Draw preloaded image
+                    if (loadedImages[index]) {
+                        p5.image(loadedImages[index], x + 10, y + 10, panelWidth - 20, 180);
                     }
 
                     // Title (comic speech bubble style)
@@ -65,7 +64,7 @@ const FormatRenderer = {
 
         'graphic-novel': {
             name: 'Graphic Novel',
-            render(p5, memories, colorTheme) {
+            render(p5, memories, colorTheme, loadedImages) {
                 const canvasWidth = 900;
                 const canvasHeight = Math.max(600, memories.length * 250);
 
@@ -91,9 +90,8 @@ const FormatRenderer = {
                     p5.rect(0, yOffset, 8, panelHeight);
 
                     // Image (full-bleed on left)
-                    if (memory.image) {
-                        const img = p5.loadImage(memory.image);
-                        p5.image(img, 20, yOffset + 20, 350, imageHeight);
+                    if (loadedImages[index]) {
+                        p5.image(loadedImages[index], 20, yOffset + 20, 350, imageHeight);
                     }
 
                     // Text content (right side)
@@ -124,7 +122,7 @@ const FormatRenderer = {
 
         'illustrated-vignettes': {
             name: 'Illustrated Vignettes',
-            render(p5, memories, colorTheme) {
+            render(p5, memories, colorTheme, loadedImages) {
                 const canvasWidth = 900;
                 const canvasHeight = 700;
 
@@ -154,10 +152,9 @@ const FormatRenderer = {
                     p5.rect(pos.x - 5, pos.y - 5, size + 10, size + 110, 10);
 
                     // Image
-                    if (memory.image) {
-                        const img = p5.loadImage(memory.image);
+                    if (loadedImages[index]) {
                         p5.noStroke();
-                        p5.image(img, pos.x, pos.y, size, size * 0.7);
+                        p5.image(loadedImages[index], pos.x, pos.y, size, size * 0.7);
                     }
 
                     // Title (handwritten style)
@@ -181,7 +178,7 @@ const FormatRenderer = {
 
         'photo-essay': {
             name: 'Photo Essay',
-            render(p5, memories, colorTheme) {
+            render(p5, memories, colorTheme, loadedImages) {
                 const canvasWidth = 900;
                 const canvasHeight = Math.max(600, memories.length * 280);
 
@@ -194,10 +191,9 @@ const FormatRenderer = {
                     const isLeft = index % 2 === 0;
 
                     // Image
-                    if (memory.image) {
-                        const img = p5.loadImage(memory.image);
+                    if (loadedImages[index]) {
                         const imgX = isLeft ? 40 : 480;
-                        p5.image(img, imgX, yOffset, 380, 240);
+                        p5.image(loadedImages[index], imgX, yOffset, 380, 240);
                     }
 
                     // Text block (magazine editorial style)
@@ -236,7 +232,7 @@ const FormatRenderer = {
 
         'simple-text': {
             name: 'Simple Text Layout',
-            render(p5, memories, colorTheme) {
+            render(p5, memories, colorTheme, loadedImages) {
                 const canvasWidth = 800;
                 const canvasHeight = Math.max(600, memories.length * 250);
 
@@ -247,9 +243,8 @@ const FormatRenderer = {
 
                 memories.forEach((memory, index) => {
                     // Small thumbnail
-                    if (memory.image) {
-                        const img = p5.loadImage(memory.image);
-                        p5.image(img, 60, yOffset, 120, 100);
+                    if (loadedImages[index]) {
+                        p5.image(loadedImages[index], 60, yOffset, 120, 100);
                     }
 
                     // Text content (manuscript style)
